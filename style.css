@@ -1,0 +1,652 @@
+:root {
+    /* Color Palette */
+    --bg-deep: #0a0a0b;
+    --bg-card: rgba(28, 28, 30, 0.6);
+    --bg-tile: rgba(45, 45, 48, 0.4);
+    --neon-green: #39ff14;
+    --neon-glow: rgba(57, 255, 20, 0.3);
+    --text-main: #ffffff;
+    --text-dim: #a0a0a5;
+    --border-glass: rgba(255, 255, 255, 0.1);
+    
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 100px;
+}
+
+/* --- Header --- */
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(10, 10, 11, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.brand h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.brand h1 span {
+    color: var(--neon-green);
+}
+
+.master-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    padding: 6px 12px;
+    border-radius: 50px;
+    border: 1px solid var(--border-glass);
+}
+
+.master-control .label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+/* --- Device Card System --- */
+.dashboard-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.device-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 16px;
+    transition: var(--transition);
+}
+
+.device-acoustic-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border-glass);
+    margin-left: auto; /* Pushes the delete button to the far right */
+    margin-right: 10px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap; /* Prevents wrapping to a new line */
+    margin-bottom: 20px;
+}
+
+.device-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.device-id {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.device-id small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-weight: 400;
+}
+
+.status-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-led.online {
+    background-color: var(--neon-green);
+    box-shadow: 0 0 8px var(--neon-green);
+}
+
+.status-led.offline {
+    background-color: #ff4444;
+    box-shadow: 0 0 8px #ff4444;
+}
+
+.btn-remove {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-remove:hover {
+    color: #ff4444;
+}
+
+/* --- Switch Grid & Tiles --- */
+.switch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.switch-tile {
+    background: var(--bg-tile);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 110px;
+    transition: var(--transition);
+}
+
+.switch-tile:active {
+    transform: scale(0.95);
+}
+
+.tile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Changed to center for better alignment */
+    gap: 5px;
+}
+
+/* NEW: Acoustic Grouping Container */
+.acoustic-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px 6px;
+    border-radius: 12px;
+    border: 1px solid var(--border-glass);
+    width: 105px;
+    flex-shrink: 0;
+}
+
+.tile-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.switch-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* NEW: Switch Actions Container */
+.switch-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* FIXED: Icon Button Sizing */
+.btn-edit,
+.btn-delete {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1rem; /* Increased from 0.8rem for better visibility */
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.btn-edit:hover,
+.btn-delete:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--neon-green);
+}
+
+.btn-delete:hover {
+    color: #ff4444;
+}
+
+/* --- Glass Switch Toggle (Main) --- */
+.glass-switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.glass-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-glass);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--neon-green);
+    box-shadow: 0 0 15px var(--neon-glow);
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+    background-color: #000;
+}
+
+/* --- NEW: Mini Glass Switch (For Acoustic Control) --- */
+.glass-switch-mini {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.glass-switch-mini input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.glass-switch-mini .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-glass);
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.glass-switch-mini .slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.glass-switch-mini input:checked + .slider {
+    background-color: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-glow);
+}
+
+.glass-switch-mini input:checked + .slider:before {
+    transform: translateX(14px);
+    background-color: #000;
+}
+
+/* New status labels for the toggles */
+.status-label {
+    font-size: 0.55rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    width: 42px;
+    text-align: center;
+    display: inline-block;
+    /*transition: var(--transition);*/
+}
+
+.status-label.active {
+    color: var(--neon-green);
+    /*text-shadow: 0 0 5px var(--neon-glow);*/
+}
+
+.status-label.inactive {
+    color: var(--text-dim);
+}
+
+/* --- Footer & FAB --- */
+.card-footer {
+    border-top: 1px solid var(--border-glass);
+    padding-top: 15px;
+}
+
+.btn-add-switch {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--border-glass);
+    color: var(--text-dim);
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-add-switch:hover {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+}
+
+.fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    border: none;
+    box-shadow: 0 8px 20px rgba(57, 255, 20, 0.4);
+    font-size: 1.5rem;
+    color: #000;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fab:active {
+    transform: scale(0.8);
+}
+
+/* --- Heartbeat/Offline State --- */
+.device-card.offline {
+    opacity: 0.6;
+    filter: grayscale(0.4);
+    transition: var(--transition);
+}
+
+/* --- Toast Notification System --- */
+.toast-container {
+    position: fixed;
+    bottom: 100px; /* Above the FAB */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast-msg {
+    background: rgba(30, 30, 32, 0.9);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 15px;
+    border: 1px solid var(--border-glass);
+    font-size: 0.85rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    animation: slideUp 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+    text-align: center;
+    min-width: 200px;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+    .switch-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .app-header {
+        padding: 15px;
+    }
+}
+
+/* Ensure the master control label area is flexible */
+.master-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    padding: 6px 12px;
+    border-radius: 50px;
+    border: 1px solid var(--border-glass);
+}
+
+/* --- Custom Modal System --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0; /* FIXED: Uses inset:0 for proper viewport coverage */
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;  /* Higher than toast (2000) and header (100) */
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+.custom-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: 28px;
+    padding: 25px;
+    width: 100%; /* Take full width up to max-width */
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* FIXED: Removed margin:auto that was conflicting with flexbox */
+    position: relative; /* Ensures stacking context */
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.custom-modal h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: var(--text-main);
+    margin-bottom: 20px;
+}
+
+.modal-body {
+    margin-bottom: 25px;
+}
+
+.modal-body input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 12px;
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+    transition: var(--transition);
+}
+
+.modal-body input:focus {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-glow);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-glass);
+    color: var(--text-dim);
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-glass);
+    color: var(--text-dim);
+}
+
+.btn-primary {
+    background: var(--neon-green);
+    border: none;
+    color: black;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 15px var(--neon-green);
+    transform: translateY(-2px);
+}
+
+.glass-switch-mini input:disabled + .slider {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+/* Dim the full device acoustic header control when Global is OFF */
+.device-acoustic-control:has(input:disabled) {
+    opacity: 0.4;
+    filter: grayscale(0.8);
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+/* Dim the switch tile acoustic control group when Global or Device is OFF */
+.acoustic-group.disabled-group {
+    opacity: 0.4;
+    filter: grayscale(0.8);
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+/* Ensure disabled slider cursor reflects blocked state */
+.glass-switch-mini input:disabled + .slider {
+    cursor: not-allowed;
+}
+
+.device-id-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.timestamp {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+}
+
+/* Mic Icon Sizing & Visual Indicator */
+.mic-icon {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    transition: var(--transition);
+}
+
+/* Active "Sound-Enabled" Glow Effect */
+.acoustic-group:not(.disabled-group) .mic-icon {
+    color: var(--neon-green);
+    filter: drop-shadow(0 0 4px var(--neon-glow));
+}
+
+/* Disabled State Styling */
+.acoustic-group.disabled-group .mic-icon {
+    color: var(--text-dim);
+    opacity: 0.5;
+}

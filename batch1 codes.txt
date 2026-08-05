@@ -1,0 +1,611 @@
+INDEX.HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AuraSmart Home</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using Phosphor Icons for a professional IoT look -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="brand">
+            <h1>Aura<span>Smart</span></h1>
+        </div>
+        <div class="master-control">
+            <span class="label">Global Acoustic</span>
+            <label class="glass-switch">
+                <input type="checkbox" id="master-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Area -->
+    <main class="dashboard-container" id="dashboard-container">
+        <!-- JavaScript will inject the device cards here for persistence -->
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="fab-add-device">
+        <i class="ph ph-plus"></i>
+    </button>
+
+    <!-- Link to external JS file -->
+    <script src="script.js"></script>
+</body>
+</html>
+
+-------------------
+
+STYLE.CSS
+
+:root {
+    /* Color Palette */
+    --bg-deep: #0a0a0b;
+    --bg-card: rgba(28, 28, 30, 0.6);
+    --bg-tile: rgba(45, 45, 48, 0.4);
+    --neon-green: #39ff14;
+    --neon-glow: rgba(57, 255, 20, 0.3);
+    --text-main: #ffffff;
+    --text-dim: #a0a0a5;
+    --border-glass: rgba(255, 255, 255, 0.1);
+    
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 100px; /* Space for FAB */
+}
+
+/* --- Header --- */
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(10, 10, 11, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.brand h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.brand h1 span {
+    color: var(--neon-green);
+}
+
+.master-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    padding: 6px 12px;
+    border-radius: 50px;
+    border: 1px solid var(--border-glass);
+}
+
+.master-control .label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+/* --- Device Card System --- */
+.dashboard-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.device-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 16px;
+    transition: var(--transition);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.device-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.device-id {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.device-id small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-weight: 400;
+}
+
+.status-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-led.online {
+    background-color: var(--neon-green);
+    box-shadow: 0 0 8px var(--neon-green);
+}
+
+.status-led.offline {
+    background-color: #ff4444;
+    box-shadow: 0 0 8px #ff4444;
+}
+
+.btn-remove {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-remove:hover {
+    color: #ff4444;
+}
+
+/* --- Switch Grid & Tiles --- */
+.switch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.switch-tile {
+    background: var(--bg-tile);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 110px; /* Slightly increased to fit new controls comfortably */
+    transition: var(--transition);
+}
+
+.switch-tile:active {
+    transform: scale(0.95);
+}
+
+.tile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Changed to center for better alignment */
+    gap: 8px;
+}
+
+/* NEW: Acoustic Grouping Container */
+.acoustic-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--border-glass);
+}
+
+.tile-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.switch-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.mic-icon {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    transition: var(--transition);
+}
+
+.btn-edit {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* --- Glass Switch Toggle (Main) --- */
+.glass-switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.glass-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-glass);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--neon-green);
+    box-shadow: 0 0 15px var(--neon-glow);
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+    background-color: #000;
+}
+
+/* --- NEW: Mini Glass Switch (For Acoustic Control) --- */
+.glass-switch-mini {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.glass-switch-mini input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.glass-switch-mini .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-glass);
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.glass-switch-mini .slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 3px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.glass-switch-mini input:checked + .slider {
+    background-color: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-glow);
+}
+
+.glass-switch-mini input:checked + .slider:before {
+    transform: translateX(14px);
+    background-color: #000;
+}
+
+/* --- Footer & FAB --- */
+.card-footer {
+    border-top: 1px solid var(--border-glass);
+    padding-top: 15px;
+}
+
+.btn-add-switch {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--border-glass);
+    color: var(--text-dim);
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-add-switch:hover {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+}
+
+.fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    border: none;
+    box-shadow: 0 8px 20px rgba(57, 255, 20, 0.4);
+    font-size: 1.5rem;
+    color: #000;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fab:active {
+    transform: scale(0.8);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+    .switch-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .app-header {
+        padding: 15px;
+    }
+}
+
+
+-----------------
+
+SCRIPT.JS
+
+/**
+ * AuraSmart Home - Core Logic
+ * Senior Frontend Implementation
+ */
+
+// --- State Management ---
+let state = {
+    masterAcousticControl: true,
+    devices: []
+};
+
+// Load data from localStorage on startup
+function init() {
+    const savedData = localStorage.getItem('auraSmartData');
+    if (savedData) {
+        state = JSON.parse(savedData);
+    } else {
+        // Default starting data for first-time users
+        state = {
+            masterAcousticControl: true,
+            devices: [
+                {
+                    id: 'dev_' + Date.now(),
+                    deviceName: 'Living Room Hub',
+                    deviceUid: '8821-X',
+                    online: true,
+                    switches: [
+                        { id: 'sw_1', name: 'Main Light', status: true, acousticEnabled: true },
+                        { id: 'sw_2', name: 'AC Unit', status: false, acousticEnabled: false }
+                    ]
+                }
+            ]
+        };
+        saveState();
+    }
+    render();
+}
+
+function saveState() {
+    localStorage.setItem('auraSmartData', JSON.stringify(state));
+}
+
+// --- UI Rendering ---
+function render() {
+    const container = document.getElementById('dashboard-container');
+    const masterToggle = document.getElementById('master-toggle');
+    
+    if (masterToggle) {
+        masterToggle.checked = state.masterAcousticControl;
+    }
+
+    // Clear existing cards
+    container.innerHTML = '';
+
+    state.devices.forEach((device, dIdx) => {
+        const card = document.createElement('section');
+        card.className = 'device-card';
+        
+        // Building the exact layout required
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="device-info">
+                    <span class="status-led ${device.online ? 'online' : 'offline'}"></span>
+                    <span class="device-id">${device.deviceName} <small>ID: ${device.deviceUid}</small></span>
+                </div>
+                <button class="btn-remove" onclick="removeDevice(${dIdx})" title="Remove Device">
+                    <i class="ph ph-trash"></i>
+                </button>
+            </div>
+
+            <div class="switch-grid">
+                ${device.switches.map((sw, sIdx) => `
+                    <div class="switch-tile">
+                        <div class="tile-top">
+                            <label class="glass-switch">
+                                <input type="checkbox" ${sw.status ? 'checked' : ''} 
+                                       onchange="toggleSwitch(${dIdx}, ${sIdx})">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div class="acoustic-group">
+                                <i class="ph ph-microphone-polaroid mic-icon"></i>
+                                <label class="glass-switch-mini">
+                                    <input type="checkbox" ${sw.acousticEnabled ? 'checked' : ''} 
+                                           onchange="toggleAcoustic(${dIdx}, ${sIdx})">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tile-bottom">
+                            <span class="switch-name">${sw.name}</span>
+                            <button class="btn-edit" onclick="renameSwitch(${dIdx}, ${sIdx})">
+                                <i class="ph ph-pencil-simple"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="card-footer">
+                <button class="btn-add-switch" onclick="addSwitch(${dIdx})">
+                    <i class="ph ph-plus-circle"></i> Add Switch
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// --- Action Functions ---
+// Attached to 'window' so that HTML 'onclick' attributes can access them
+
+window.toggleSwitch = function(dIdx, sIdx) {
+    state.devices[dIdx].switches[sIdx].status = !state.devices[dIdx].switches[sIdx].status;
+    saveState();
+};
+
+window.toggleAcoustic = function(dIdx, sIdx) {
+    state.devices[dIdx].switches[sIdx].acousticEnabled = !state.devices[dIdx].switches[sIdx].acousticEnabled;
+    saveState();
+};
+
+window.addSwitch = function(dIdx) {
+    const switchName = prompt("Enter Switch Name (e.g., Ceiling Fan):");
+    if (!switchName) return;
+
+    state.devices[dIdx].switches.push({
+        id: 'sw_' + Date.now(),
+        name: switchName,
+        status: false,
+        acousticEnabled: true // New switches default to having acoustic control enabled
+    });
+
+    saveState();
+    render();
+};
+
+window.renameSwitch = function(dIdx, sIdx) {
+    const currentName = state.devices[dIdx].switches[sIdx].name;
+    const newName = prompt("Rename Switch:", currentName);
+    
+    if (newName) {
+        state.devices[dIdx].switches[sIdx].name = newName;
+        saveState();
+        render();
+    }
+};
+
+window.removeDevice = function(dIdx) {
+    if (confirm("Are you sure you want to remove this device and all its switches?")) {
+        state.devices.splice(dIdx, 1);
+        saveState();
+        render();
+    }
+};
+
+// --- Event Listeners for Page Load ---
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+
+    // Global Master Toggle Logic
+    const masterToggle = document.getElementById('master-toggle');
+    if (masterToggle) {
+        masterToggle.addEventListener('change', (e) => {
+            state.masterAcousticControl = e.target.checked;
+            saveState();
+        });
+    }
+
+    // FAB Add Device Logic
+    const fabBtn = document.getElementById('fab-add-device');
+    if (fabBtn) {
+        fabBtn.addEventListener('click', () => {
+            const name = prompt("Enter Device Name (e.g., Bedroom Hub):");
+            if (!name) return;
+
+            const uid = prompt("Enter Device ID (e.g., 1234-X):", "XXXX-X");
+            
+            const newDevice = {
+                id: 'dev_' + Date.now(),
+                deviceName: name,
+                deviceUid: uid || 'XXXX-X',
+                online: true,
+                switches: []
+            };
+
+            state.devices.push(newDevice);
+            saveState();
+            render();
+        });
+    }
+});

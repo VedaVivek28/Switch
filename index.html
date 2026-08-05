@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AuraSmart Home</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Theme Color for Android Browser Header -->
+    <meta name="theme-color" content="#0a0a0b">
+    
+    <!-- iOS Specific PWA Settings -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="brand">
+            <div class="conn-status-container">
+                <span id="mqtt-led" class="status-led offline"></span>
+                <h1>AuraSmart <span>Home Control</span></h1>
+            </div>
+        </div>
+        <div class="master-control">
+            <span class="label">Acoustic Control (Master)</span>
+            <label class="glass-switch">
+                <input type="checkbox" id="master-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </header>
+
+    <main class="dashboard-container" id="dashboard-container"></main>
+
+    <button class="fab" id="fab-add-device">
+        <i class="ph ph-plus"></i>
+    </button>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- SERVICE WORKER REGISTRATION -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => console.log('PWA: Service Worker Registered'))
+                    .catch(err => console.log('PWA: Registration Failed', err));
+            });
+        }
+    </script>
+
+    <!-- CUSTOM MODAL SYSTEM -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="custom-modal">
+            <h3 id="modal-title">Add Device</h3>
+            <div class="modal-body">
+                <input type="text" id="modal-input" placeholder="Enter name...">
+            </div>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn-secondary">Cancel</button>
+                <button id="modal-confirm" class="btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
