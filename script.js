@@ -271,7 +271,7 @@ function render() {
         const headerLabel = document.querySelector('.master-control .label');
         const statusText = state.masterAcousticControl ? 'ENABLED' : 'DISABLED';
         const statusClass = state.masterAcousticControl ? 'active' : 'inactive';
-        headerLabel.innerHTML = `Acoustic Control (Master) <span class="status-label ${statusClass}">${statusText}</span>`;
+        headerLabel.innerHTML = `Acoustic Master <span class="status-label ${statusClass}">${statusText}</span>`;
     }
 
     container.innerHTML = '';

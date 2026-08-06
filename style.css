@@ -634,33 +634,41 @@ input:checked + .slider:before {
     opacity: 0.5;
 }
 
-/* --- MOBILE RESPONSIVE ADAPTATION --- */
+/* --- MOBILE RESPONSIVE FIXES --- */
 @media (max-width: 600px) {
     .app-header {
         flex-direction: column;
         align-items: stretch;
-        padding: 15px;
+        padding: 12px 16px;
+        gap: 10px;
     }
 
-    .brand {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    /* Wrap header title nicely */
+    .brand h1 {
+        font-size: 1.2rem;
+        line-height: 1.3;
     }
 
+    /* Allow Master Control to fit mobile screens dynamically */
     .master-control {
-        width: 100%;
-        justify-content: space-between;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
     }
 
-    .dashboard-container {
-        padding: 12px;
-        gap: 16px;
-    }
-
+    /* Card Header adjustments */
     .card-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
         align-items: center;
         gap: 10px;
+    }
+
+    .device-info {
+        min-width: 0;
+        flex: 1 1 auto;
     }
 
     .device-acoustic-control {
@@ -668,9 +676,24 @@ input:checked + .slider:before {
         margin-right: 0;
     }
 
+    /* Force switch grid into a clean single column on mobile */
     .switch-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
         gap: 12px;
+        width: 100%;
+    }
+
+    .switch-tile {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Keep acoustic control group inside the tile */
+    .acoustic-group {
+        width: 115px !important;
+        min-width: 115px !important;
+        max-width: 115px !important;
+        padding: 4px 6px;
     }
 
     .fab {
@@ -679,16 +702,5 @@ input:checked + .slider:before {
         width: 52px;
         height: 52px;
         font-size: 1.3rem;
-    }
-}
-
-@media (max-width: 400px) {
-    .card-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .device-acoustic-control {
-        width: 100%;
     }
 }
