@@ -690,10 +690,22 @@ input:checked + .slider:before {
 
     /* Keep acoustic control group inside the tile */
     .acoustic-group {
-        width: 135px !important;
-        min-width: 135px !important;
-        max-width: 135px !important;
-        padding: 4px 6px;
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+        padding: 4px 8px !important;
+        gap: 4px !important;
+    }
+
+    /* Shrink mic icon slightly to free up horizontal space */
+    .acoustic-group .mic-icon {
+        font-size: 0.8rem !important;
+    }
+
+    /* Allow label to display full text comfortably */
+    .acoustic-group .status-label {
+        font-size: 0.65rem !important;
+        letter-spacing: 0 !important;
     }
 
     .fab {
