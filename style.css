@@ -690,9 +690,9 @@ input:checked + .slider:before {
 
     /* Keep acoustic control group inside the tile */
     .acoustic-group {
-        width: 125px !important;
-        min-width: 125px !important;
-        max-width: 125px !important;
+        width: 135px !important;
+        min-width: 135px !important;
+        max-width: 135px !important;
         padding: 4px 6px;
     }
 
